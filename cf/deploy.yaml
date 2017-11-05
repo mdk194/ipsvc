@@ -26,8 +26,8 @@ Resources:
       ImageId: !Ref ImageId
       KeyName: !Ref SSHKeyName
       InstanceType: t2.nano
-      SecurityGroups:
-        - !Ref Ec2SecurityGroup
+      SecurityGroupIds:
+        - !GetAtt Ec2SecurityGroup.GroupId
 
   Ec2SecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
