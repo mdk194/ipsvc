@@ -248,8 +248,8 @@ Resources:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !GetAtt PipelineExecutionRole.Arn
                 StackName: ipsvc-instance
-                TemplateConfiguration: CFNTemplateArtifact::config.json
-                TemplatePath: CFNTemplateArtifact::deploy.yaml
+                TemplateConfiguration: BuiltZip::config.json
+                TemplatePath: BuiltZip::deploy.yaml
 
 Outputs:
   ArtifactRepository:
