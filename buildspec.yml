@@ -1,0 +1,34 @@
+---
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Installing Packer"
+      - curl -o packer.zip https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip && unzip packer.zip
+      - echo "Validating Packer template"
+      - ./packer validate packer.json
+
+  build:
+    commands:
+      - echo "Building binary"
+      - make
+      - echo "Building ami"
+      - ./packer build -color=false packer.json | tee build_ami.log
+
+  post_build:
+    commands:
+      - egrep "${AWS_REGION}\:\sami\-" build_ami.log | cut -d' ' -f2 > ami_id.txt
+      # Packer doesn't return non-zero status; we must do that if Packer build failed
+      - test -s ami_id.txt || exit 1
+      # replace new ami_id then cloudformation will pick it up and deploy new instance
+      - sed -i "s/AMI_ID/$(cat ami_id.txt)/g" cf/config.json
+      - echo "build completed on `date`"
+
+artifacts:
+  files:
+    - build_ami.log
+    - ami_id.txt
+    - cf/config.json
+    - cf/deploy.yaml
+  discard-paths: yes
