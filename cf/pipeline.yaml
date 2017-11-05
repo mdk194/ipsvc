@@ -115,7 +115,6 @@ Resources:
             Principal:
               Service:
                 - codepipeline.amazonaws.com
-                - cloudformation.amazonaws.com
       Policies:
         -
           PolicyName: CodePipelinePassRoleAccess
@@ -168,10 +167,57 @@ Resources:
                   - 'codebuild:BatchGetBuilds'
                 Effect: Allow
                 Resource: !GetAtt CodeBuildProject.Arn
-        - PolicyName: CloudformationDeploy
+
+  CloudFormationRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "cloudformation.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: /
+      Policies:
+        -
+          PolicyName: "CloudformationDeployIPsvc"
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "iam:GetInstanceProfile"
+                  - "iam:GetPolicy"
+                  - "iam:GetRole"
+                  - "iam:GetRolePolicy"
+                  - "iam:List*"
+                Resource:
+                  - !Sub arn:aws:iam::${AWS::AccountId}:role/*
+              -
+                Effect: "Allow"
+                Action:
+                  - "ec2:*"
+                Resource:
+                  - "*"
+              -
+                Effect: "Allow"
+                Action:
+                  - "s3:DeleteObject"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                Resource:
+                  - !Sub arn:aws:s3:::${BuildArtifactsBucket}/*
+              -
+                Effect: "Allow"
+                Action:
+                  - "codepipeline:*"
+                Resource:
+                  - !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:*
               -
                 Effect: "Allow"
                 Action:
@@ -188,18 +234,6 @@ Resources:
                 Resource:
                   - !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*
                   - !Sub arn:aws:cloudformation:${AWS::Region}:aws:transform/Serverless-2016-10-31
-              -
-                Effect: "Allow"
-                Action:
-                  - "ec2:*"
-                Resource:
-                  - "*"
-              -
-                Effect: "Allow"
-                Action:
-                  - "codepipeline:*"
-                Resource:
-                  - !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:*
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -246,7 +280,7 @@ Resources:
                 {Category: Deploy, Owner: AWS, Version: 1, Provider: CloudFormation}
               Configuration:
                 ActionMode: CREATE_UPDATE
-                RoleArn: !GetAtt PipelineExecutionRole.Arn
+                RoleArn: !GetAtt CloudFormationRole.Arn
                 StackName: ipsvc-instance
                 TemplateConfiguration: BuiltZip::config.json
                 TemplatePath: BuiltZip::deploy.yaml
