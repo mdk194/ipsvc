@@ -129,6 +129,27 @@ Resources:
                   - !GetAtt CodeBuildServiceRole.Arn
                   - !GetAtt CloudFormationRole.Arn
         -
+          PolicyName: CloudformationDeploy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "cloudformation:CreateChangeSet"
+                  - "cloudformation:CreateStack"
+                  - "cloudformation:CreateUploadBucket"
+                  - "cloudformation:DeleteChangeSet"
+                  - "cloudformation:DeleteStack"
+                  - "cloudformation:Describe*"
+                  - "cloudformation:List*"
+                  - "cloudformation:UpdateStack"
+                  - "cloudformation:ValidateTemplate"
+                  - "cloudformation:ExecuteChangeSet"
+                Resource:
+                  - !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*
+                  - !Sub arn:aws:cloudformation:${AWS::Region}:aws:transform/Serverless-2016-10-31
+        -
           PolicyName: CodePipelineS3ArtifactAccess
           PolicyDocument:
             Version: '2012-10-17'

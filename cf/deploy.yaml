@@ -21,6 +21,7 @@ Resources:
 
   Instance:
     Type: AWS::EC2::Instance
+    DependsOn: [Ec2SecurityGroup, EIP]
     Properties:
       ImageId: !Ref ImageId
       KeyName: !Ref SSHKeyName
