@@ -73,6 +73,7 @@ func renderMain(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", renderMain)
-	http.ListenAndServe(":8000", nil)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", renderMain)
+	http.ListenAndServe(":8000", mux)
 }

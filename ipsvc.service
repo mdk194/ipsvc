@@ -1,0 +1,13 @@
+[Unit]
+Description=ipsvc service
+
+[Service]
+User=ipsvc
+Group=ipsvc
+Type=simple
+Restart=on-failure
+RestartSec=10
+ExecStart=/usr/local/bin/ipsvc
+
+[Install]
+WantedBy=multi-user.target
