@@ -6,14 +6,13 @@ phases:
     commands:
       - echo "Installing Packer"
       - curl -o packer.zip https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip && unzip packer.zip
-      - echo "Validating Packer template"
-      - ./packer validate packer.json
 
   build:
     commands:
       - echo "Building binary"
       - make
       - echo "Building ami"
+      - ./packer validate packer.json
       - ./packer build -color=false packer.json | tee build_ami.log
 
   post_build:
