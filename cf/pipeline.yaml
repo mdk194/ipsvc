@@ -115,6 +115,7 @@ Resources:
             Principal:
               Service:
                 - codepipeline.amazonaws.com
+                - cloudformation.amazonaws.com
       Policies:
         -
           PolicyName: CodePipelinePassRoleAccess
@@ -124,7 +125,9 @@ Resources:
               -
                 Action: 'iam:PassRole'
                 Effect: Allow
-                Resource: !GetAtt CodeBuildServiceRole.Arn
+                Resource:
+                  - !GetAtt CodeBuildServiceRole.Arn
+                  - !GetAtt CloudFormationRole.Arn
         -
           PolicyName: CodePipelineS3ArtifactAccess
           PolicyDocument:
