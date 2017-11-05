@@ -1,0 +1,48 @@
+---
+Parameters:
+  VPC:
+    Type: "AWS::EC2::VPC::Id"
+
+  SubnetId:
+    Type: String
+
+  ImageId:
+    Type: String
+
+  SSHKeyName:
+    Type: String
+
+
+Resources:
+  EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: !Ref SSHKeyName
+      InstanceType: t2.nano
+      SecurityGroups:
+        - !Ref Ec2SecurityGroup
+
+  Ec2SecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: ipsvc
+      GroupDescription: Secgroup for ipsvc instance
+      VpcId: !Ref VPC
+      Tags:
+        - {Key: Name, Value: ipsvc}
+      SecurityGroupIngress:
+        - {IpProtocol: tcp, FromPort: 8000, ToPort: 8000, CidrIp: 0.0.0.0/0}
+
+
+Outputs:
+  IP:
+    Description: public elastic ip address to access svc
+    Value: !Ref EIP
+    Export:
+      Name: !Sub "${AWS::StackName}-IP"

@@ -1,0 +1,8 @@
+{
+    "Parameters": {
+        "VPC": "vpc-c49d61ac",
+        "ImageId": "AMI_ID",
+        "SSHKeyName": "mdk",
+        "SubnetId": "subnet-00d36068"
+    }
+}
