@@ -98,9 +98,7 @@ Resources:
             Value: !Ref BuilderPublicSubnet
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
-        Location:
-          !Sub https://git-codecommit.${AWS::Region}.amazonaws.com/v1/repos/${ServiceName}
-        Type: CODECOMMIT
+        Type: CODEPIPELINE
 
   PipelineExecutionRole:
     Type: AWS::IAM::Role
