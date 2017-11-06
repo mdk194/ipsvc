@@ -2,6 +2,7 @@ sample web server when visited will render html page showing local ip of server
 and version number
 
 Contains:
+```
 .
 ├── buildspec.yml       # AWS Codebuild steps
 ├── cf                  # folder contains Cloudformation (CF) templates
@@ -13,6 +14,7 @@ Contains:
 ├── Makefile            # instructions to compile main.go
 ├── packer.json         # packer template to build AMI
 └── README.md
+```
 
 deploy:
 - create aws codecommit repo
