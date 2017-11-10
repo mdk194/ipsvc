@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ipsvc-1.0
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ipsvc
+        version: "2.0"
+    spec:
+      containers:
+        - name: ipsvc
+          image: ipsvc:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
