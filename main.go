@@ -41,8 +41,8 @@ func init() {
 
 	var tmp []string
 	for i := 1; i < 4; i++ {
-		v, _ := strconv.Atoi(all[i])
-		tmp = append(tmp, fmt.Sprintf("%02X", v))
+		v, _ := strconv.Atoi(all[len(all)-i])
+		tmp = append(tmp, fmt.Sprintf("%X", v))
 	}
 	color = strings.Join(tmp, "")
 
