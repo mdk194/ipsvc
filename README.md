@@ -27,3 +27,5 @@ K8s deploy:
 ```
 kubectl apply -f k8s/
 ```
+
+![pipeline](./images/pipeline.png)
