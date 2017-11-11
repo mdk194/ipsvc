@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -37,16 +35,8 @@ func init() {
 	localAddr := getLocalAddr()
 	ip = strings.Split(localAddr, ":")[0]
 
-	all := strings.Split(ip, ".")
-
-	var tmp []string
-	for i := 1; i < 4; i++ {
-		v, _ := strconv.Atoi(all[len(all)-i])
-		tmp = append(tmp, fmt.Sprintf("%X", v))
-	}
-	color = strings.Join(tmp, "")
-
 	version = "1.0"
+	color = "FFFFFF"
 
 	t = template.New("site")
 	t.Parse(doc)
