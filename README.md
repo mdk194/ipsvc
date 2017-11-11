@@ -9,6 +9,9 @@ Contains:
 │   ├── config.json     # configuration parameters for deploy.yaml CF template
 │   ├── deploy.yaml     # EC2 instance + Elastic IP that hosting the web server
 │   └── pipeline.yaml   # codepipeline + codebuild + iam roles ....
+├── k8s                 # Kubernetes resources definitions
+│   ├── ipsvc-de.yaml   # deployment object for ipsvc
+│   └── ipsvc-svc.yaml  # service object for ipsvc
 ├── ipsvc.service       # systemd service to run the web server at boot
 ├── main.go             # web server source code in Golang
 ├── Makefile            # instructions to compile main.go
@@ -16,6 +19,11 @@ Contains:
 └── README.md
 ```
 
-deploy:
+AMI deploy:
 - create aws codecommit repo
-- aws cloudformation create-stack --stack-name ipsvc-pipeline --capabilities CAPABILITY_NAMED_IAM --template-body file://cf/pipeline.yaml
+- `aws cloudformation create-stack --stack-name ipsvc-pipeline --capabilities CAPABILITY_NAMED_IAM --template-body file://cf/pipeline.yaml`
+
+K8s deploy:
+```
+kubectl apply -f k8s/
+```
